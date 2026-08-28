@@ -6,7 +6,7 @@
 > from the [`mojo-import-crates-skill`](https://github.com/sstadick/mojo-import-crates-skill)
 > project. Review and test the generated bindings before using them in critical applications.
 
-**[API documentation](https://extramojo.github.io/zipprs-llm/)**
+**[Documentation, guides, and examples](https://extramojo.github.io/zipprs-llm/)**
 
 `ziprs` is a compiled Mojo library backed by Rust's [`zip` 8.6.0](https://crates.io/crates/zip/8.6.0).
 It reads and writes ZIP archives through an ordinary `from ziprs import ...` API while Pixi builds

@@ -13,16 +13,20 @@ module:
 
 menu:
   main:
+    - identifier: Guide
+      name: Guides
+      pageRef: /guide
+      weight: 1
     - identifier: Docs
       name: API
       pageRef: /ziprs
       weight: 2
     - name: Search
-      weight: 1
+      weight: 3
       params:
         type: search
     - name: GitHub
-      weight: 2
+      weight: 4
       url: "https://github.com/ExtraMojo/zipprs-llm"
       params:
         icon: github
