@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - One-command installation from the Git source in the README.
 - Modo and Hugo API-documentation generation in CI, with generated artifacts and `gh-pages`
   deployment from `main`.
+- Structured API docstrings, task-oriented guides, and executable reading and writing examples.
 
 ## [0.1.0] - 2026-08-28
 

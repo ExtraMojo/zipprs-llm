@@ -11,12 +11,12 @@ source-url:
   ziprs: https://github.com/ExtraMojo/zipprs-llm/blob/main/ziprs
 
 output: docs/site/content
-tests: ""
+tests: docs/test
 format: hugo
 exports: false
 short-links: true
 report-missing: true
-strict: false
+strict: true
 dry-run: false
 case-insensitive: false
 templates: [docs/templates]
@@ -24,11 +24,15 @@ templates: [docs/templates]
 pre-run:
   - |
     echo "Running 'mojo doc'..."
-    pixi run mojo doc -o docs/src/ziprs.json ziprs
+    pixi run mojo doc --diagnose-missing-doc-strings --Werror -o docs/src/ziprs.json ziprs
     echo "Done."
 
 pre-build: []
 pre-test: []
-post-test: []
+post-test:
+  - |
+    echo "Running generated documentation examples..."
+    find docs/test -name '*.mojo' -exec pixi run mojo run -I . -D ASSERT=all {} \;
+    echo "Done."
 post-build: []
 post-run: []
