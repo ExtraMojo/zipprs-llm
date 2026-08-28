@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 - Modo and Hugo API-documentation generation in CI, with generated artifacts and `gh-pages`
   deployment from `main`.
 - Structured API docstrings, task-oriented guides, and executable reading and writing examples.
+- An example-first documentation homepage with installation, a complete round trip, and direct API
+  navigation.
 
 ## [0.1.0] - 2026-08-28
 
