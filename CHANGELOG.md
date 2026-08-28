@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- One-command installation from the Git source in the README.
+- Modo and Hugo API-documentation generation in CI, with generated artifacts and `gh-pages`
+  deployment from `main`.
+
 ## [0.1.0] - 2026-08-28
 
 ### Added

@@ -18,6 +18,13 @@ and Deflate compression.
 The examples below track `main` so they work before the first release tag exists. For reproducible
 builds, pin an immutable commit as shown below.
 
+Enable Pixi's source-build support once with `pixi workspace preview add pixi-build`, then add the
+Git source directly to the project:
+
+```sh
+pixi add --git "https://github.com/ExtraMojo/zipprs-llm.git" ziprs && pixi install
+```
+
 For an application that is only run from its Pixi environment, add `ziprs` to `[dependencies]`:
 
 ```toml
