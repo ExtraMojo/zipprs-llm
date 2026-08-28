@@ -1,0 +1,63 @@
+# GENERATED FILE - DO NOT EDIT DIRECTLY
+# Generator: rust-mojo-binding-integrator 0.1.0
+schema_version: 1
+
+context:
+  name: "ziprs-rust-mojo-bindings"
+  version: "0.1.0"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  path: .
+
+build:
+  number: 0
+  string: rust_mojo_e71a037a5be9_h${{ hash }}_${{ build_number }}
+  skip:
+    - win
+  script:
+    - mkdir -p "$PREFIX/lib" "$PREFIX/lib/mojo" .rust-mojo-target
+    - "RUSTFLAGS=\"${RUSTFLAGS:-} --remap-path-prefix=${SRC_DIR}=/usr/src/rust-mojo-bindings --remap-path-prefix=${BUILD_PREFIX}=/usr/src/rust-build-prefix\" cargo test --release --locked --manifest-path zip/ffi/Cargo.toml --target-dir .rust-mojo-target/zip --test bridge -- --list | grep -q ': test$'"
+    - "RUSTFLAGS=\"${RUSTFLAGS:-} --remap-path-prefix=${SRC_DIR}=/usr/src/rust-mojo-bindings --remap-path-prefix=${BUILD_PREFIX}=/usr/src/rust-build-prefix\" cargo test --release --locked --manifest-path zip/ffi/Cargo.toml --target-dir .rust-mojo-target/zip --test bridge"
+    - RUSTFLAGS="${RUSTFLAGS:-} --remap-path-prefix=${SRC_DIR}=/usr/src/rust-mojo-bindings --remap-path-prefix=${BUILD_PREFIX}=/usr/src/rust-build-prefix" cargo build --release --locked --manifest-path zip/ffi/Cargo.toml --target-dir .rust-mojo-target/zip
+    - if: linux
+      then:
+        - install -m 755 ".rust-mojo-target/zip/${CARGO_BUILD_TARGET:+${CARGO_BUILD_TARGET}/}release/libziprs_zip_ffi.so" "$PREFIX/lib/libziprs_zip_ffi.so"
+    - if: osx
+      then:
+        - install -m 755 ".rust-mojo-target/zip/${CARGO_BUILD_TARGET:+${CARGO_BUILD_TARGET}/}release/libziprs_zip_ffi.dylib" "$PREFIX/lib/libziprs_zip_ffi.dylib"
+    - mojo precompile zip/mojo/ziprs_native -o "$PREFIX/lib/mojo/ziprs_native.mojoc"
+    - "MODULAR_HOME=\"$PREFIX/share/max\" \"$PREFIX/bin/mojo\" run zip/tests/smoke.mojo"
+
+requirements:
+  build:
+    - ${{ compiler('rust') }}
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - "mojo-compiler ==1.0.0"
+  host:
+    - "mojo-compiler ==1.0.0"
+  run:
+    - "mojo-compiler ==1.0.0"
+
+tests:
+  - package_contents:
+      files:
+        - lib/mojo/ziprs_native.mojoc
+        - if: linux
+          then:
+            - lib/libziprs_zip_ffi.so
+        - if: osx
+          then:
+            - lib/libziprs_zip_ffi.dylib
+  - script:
+      - mojo run zip/tests/smoke.mojo
+    files:
+      source:
+        - zip/tests/smoke.mojo
+
+about:
+  summary: Generated Rust-to-Mojo bindings for the parent project.

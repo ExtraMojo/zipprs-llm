@@ -1,0 +1,1934 @@
+{
+  "schema_version": 3,
+  "backend": {
+    "name": "diplomat-gen-mojo",
+    "version": "0.1.0",
+    "diplomat_core_version": "0.16.1"
+  },
+  "abi_model_sha256": "639a8abd29b406d03dd964236c50c38f83f59eeb04cf0a201abd47fe5f9d99df",
+  "mojo_body_sha256": "b45e83913fd9ecc6de02b72c30beb560652ad5f4965427cdba53f2021899d5ab",
+  "structs": [],
+  "opaques": [
+    {
+      "name": "Archive",
+      "destructor_abi_name": "rust_mojo__zip__Archive_destroy",
+      "destructor_mojo_abi_alias": "Archive_destroy_abi"
+    },
+    {
+      "name": "ArchiveResult",
+      "destructor_abi_name": "rust_mojo__zip__ArchiveResult_destroy",
+      "destructor_mojo_abi_alias": "ArchiveResult_destroy_abi"
+    },
+    {
+      "name": "BytesResult",
+      "destructor_abi_name": "rust_mojo__zip__BytesResult_destroy",
+      "destructor_mojo_abi_alias": "BytesResult_destroy_abi"
+    },
+    {
+      "name": "CountResult",
+      "destructor_abi_name": "rust_mojo__zip__CountResult_destroy",
+      "destructor_mojo_abi_alias": "CountResult_destroy_abi"
+    },
+    {
+      "name": "Entry",
+      "destructor_abi_name": "rust_mojo__zip__Entry_destroy",
+      "destructor_mojo_abi_alias": "Entry_destroy_abi"
+    },
+    {
+      "name": "EntryResult",
+      "destructor_abi_name": "rust_mojo__zip__EntryResult_destroy",
+      "destructor_mojo_abi_alias": "EntryResult_destroy_abi"
+    },
+    {
+      "name": "UnitResult",
+      "destructor_abi_name": "rust_mojo__zip__UnitResult_destroy",
+      "destructor_mojo_abi_alias": "UnitResult_destroy_abi"
+    },
+    {
+      "name": "ZipBytes",
+      "destructor_abi_name": "rust_mojo__zip__ZipBytes_destroy",
+      "destructor_mojo_abi_alias": "ZipBytes_destroy_abi"
+    },
+    {
+      "name": "ZipWriter",
+      "destructor_abi_name": "rust_mojo__zip__ZipWriter_destroy",
+      "destructor_mojo_abi_alias": "ZipWriter_destroy_abi"
+    }
+  ],
+  "enums": [
+    {
+      "name": "Compression",
+      "variants": [
+        {
+          "name": "Stored",
+          "discriminant": 0
+        },
+        {
+          "name": "Deflated",
+          "discriminant": 1
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "owner": "Archive",
+      "rust_name": "open",
+      "abi_name": "rust_mojo__zip__Archive_open",
+      "mojo_abi_alias": "Archive_open_abi",
+      "params": [
+        {
+          "name": "data_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "data_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "ArchiveResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "len",
+      "abi_name": "rust_mojo__zip__Archive_len",
+      "mojo_abi_alias": "Archive_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "is_empty",
+      "abi_name": "rust_mojo__zip__Archive_is_empty",
+      "mojo_abi_alias": "Archive_is_empty_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "has_name",
+      "abi_name": "rust_mojo__zip__Archive_has_name",
+      "mojo_abi_alias": "Archive_has_name_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "name_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "name_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "index_for_name",
+      "abi_name": "rust_mojo__zip__Archive_index_for_name",
+      "mojo_abi_alias": "Archive_index_for_name_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "name_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "name_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "entry",
+      "abi_name": "rust_mojo__zip__Archive_entry",
+      "mojo_abi_alias": "Archive_entry_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "index",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "EntryResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "read",
+      "abi_name": "rust_mojo__zip__Archive_read",
+      "mojo_abi_alias": "Archive_read__abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "index",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "BytesResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "read_into",
+      "abi_name": "rust_mojo__zip__Archive_read_into",
+      "mojo_abi_alias": "Archive_read_into_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "index",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "CountResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "Archive",
+      "rust_name": "comment",
+      "abi_name": "rust_mojo__zip__Archive_comment",
+      "mojo_abi_alias": "Archive_comment_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Archive",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "ZipBytes",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "ArchiveResult",
+      "rust_name": "is_ok",
+      "abi_name": "rust_mojo__zip__ArchiveResult_is_ok",
+      "mojo_abi_alias": "ArchiveResult_is_ok_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ArchiveResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "ArchiveResult",
+      "rust_name": "error_utf8_len",
+      "abi_name": "rust_mojo__zip__ArchiveResult_error_utf8_len",
+      "mojo_abi_alias": "ArchiveResult_error_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ArchiveResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "ArchiveResult",
+      "rust_name": "error_utf8_copy",
+      "abi_name": "rust_mojo__zip__ArchiveResult_error_utf8_copy",
+      "mojo_abi_alias": "ArchiveResult_error_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ArchiveResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "ArchiveResult",
+      "rust_name": "take",
+      "abi_name": "rust_mojo__zip__ArchiveResult_take",
+      "mojo_abi_alias": "ArchiveResult_take_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ArchiveResult",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "Archive",
+          "mutable": true,
+          "owned": true,
+          "optional": true
+        }
+      }
+    },
+    {
+      "owner": "BytesResult",
+      "rust_name": "is_ok",
+      "abi_name": "rust_mojo__zip__BytesResult_is_ok",
+      "mojo_abi_alias": "BytesResult_is_ok_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "BytesResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "BytesResult",
+      "rust_name": "error_utf8_len",
+      "abi_name": "rust_mojo__zip__BytesResult_error_utf8_len",
+      "mojo_abi_alias": "BytesResult_error_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "BytesResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "BytesResult",
+      "rust_name": "error_utf8_copy",
+      "abi_name": "rust_mojo__zip__BytesResult_error_utf8_copy",
+      "mojo_abi_alias": "BytesResult_error_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "BytesResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "BytesResult",
+      "rust_name": "take",
+      "abi_name": "rust_mojo__zip__BytesResult_take",
+      "mojo_abi_alias": "BytesResult_take_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "BytesResult",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "ZipBytes",
+          "mutable": true,
+          "owned": true,
+          "optional": true
+        }
+      }
+    },
+    {
+      "owner": "CountResult",
+      "rust_name": "is_ok",
+      "abi_name": "rust_mojo__zip__CountResult_is_ok",
+      "mojo_abi_alias": "CountResult_is_ok_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "CountResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "CountResult",
+      "rust_name": "value",
+      "abi_name": "rust_mojo__zip__CountResult_value",
+      "mojo_abi_alias": "CountResult_value_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "CountResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "CountResult",
+      "rust_name": "error_utf8_len",
+      "abi_name": "rust_mojo__zip__CountResult_error_utf8_len",
+      "mojo_abi_alias": "CountResult_error_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "CountResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "CountResult",
+      "rust_name": "error_utf8_copy",
+      "abi_name": "rust_mojo__zip__CountResult_error_utf8_copy",
+      "mojo_abi_alias": "CountResult_error_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "CountResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "name_utf8_len",
+      "abi_name": "rust_mojo__zip__Entry_name_utf8_len",
+      "mojo_abi_alias": "Entry_name_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "name_utf8_copy",
+      "abi_name": "rust_mojo__zip__Entry_name_utf8_copy",
+      "mojo_abi_alias": "Entry_name_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "has_enclosed_name",
+      "abi_name": "rust_mojo__zip__Entry_has_enclosed_name",
+      "mojo_abi_alias": "Entry_has_enclosed_name_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "enclosed_name_utf8_len",
+      "abi_name": "rust_mojo__zip__Entry_enclosed_name_utf8_len",
+      "mojo_abi_alias": "Entry_enclosed_name_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "enclosed_name_utf8_copy",
+      "abi_name": "rust_mojo__zip__Entry_enclosed_name_utf8_copy",
+      "mojo_abi_alias": "Entry_enclosed_name_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "comment_utf8_len",
+      "abi_name": "rust_mojo__zip__Entry_comment_utf8_len",
+      "mojo_abi_alias": "Entry_comment_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "comment_utf8_copy",
+      "abi_name": "rust_mojo__zip__Entry_comment_utf8_copy",
+      "mojo_abi_alias": "Entry_comment_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "compressed_size",
+      "abi_name": "rust_mojo__zip__Entry_compressed_size",
+      "mojo_abi_alias": "Entry_compressed_size_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int64"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "size",
+      "abi_name": "rust_mojo__zip__Entry_size",
+      "mojo_abi_alias": "Entry_size_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int64"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "crc32",
+      "abi_name": "rust_mojo__zip__Entry_crc32",
+      "mojo_abi_alias": "Entry_crc32_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int32"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "compression_code",
+      "abi_name": "rust_mojo__zip__Entry_compression_code",
+      "mojo_abi_alias": "Entry_compression_code_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int16"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "compression_name_utf8_len",
+      "abi_name": "rust_mojo__zip__Entry_compression_name_utf8_len",
+      "mojo_abi_alias": "Entry_compression_name_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "compression_name_utf8_copy",
+      "abi_name": "rust_mojo__zip__Entry_compression_name_utf8_copy",
+      "mojo_abi_alias": "Entry_compression_name_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "is_dir",
+      "abi_name": "rust_mojo__zip__Entry_is_dir",
+      "mojo_abi_alias": "Entry_is_dir_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "is_file",
+      "abi_name": "rust_mojo__zip__Entry_is_file",
+      "mojo_abi_alias": "Entry_is_file_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "is_symlink",
+      "abi_name": "rust_mojo__zip__Entry_is_symlink",
+      "mojo_abi_alias": "Entry_is_symlink_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "has_unix_mode",
+      "abi_name": "rust_mojo__zip__Entry_has_unix_mode",
+      "mojo_abi_alias": "Entry_has_unix_mode_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "Entry",
+      "rust_name": "unix_mode",
+      "abi_name": "rust_mojo__zip__Entry_unix_mode",
+      "mojo_abi_alias": "Entry_unix_mode_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "Entry",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int32"
+      }
+    },
+    {
+      "owner": "EntryResult",
+      "rust_name": "is_ok",
+      "abi_name": "rust_mojo__zip__EntryResult_is_ok",
+      "mojo_abi_alias": "EntryResult_is_ok_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "EntryResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "EntryResult",
+      "rust_name": "error_utf8_len",
+      "abi_name": "rust_mojo__zip__EntryResult_error_utf8_len",
+      "mojo_abi_alias": "EntryResult_error_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "EntryResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "EntryResult",
+      "rust_name": "error_utf8_copy",
+      "abi_name": "rust_mojo__zip__EntryResult_error_utf8_copy",
+      "mojo_abi_alias": "EntryResult_error_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "EntryResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "EntryResult",
+      "rust_name": "take",
+      "abi_name": "rust_mojo__zip__EntryResult_take",
+      "mojo_abi_alias": "EntryResult_take_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "EntryResult",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "Entry",
+          "mutable": true,
+          "owned": true,
+          "optional": true
+        }
+      }
+    },
+    {
+      "owner": "UnitResult",
+      "rust_name": "is_ok",
+      "abi_name": "rust_mojo__zip__UnitResult_is_ok",
+      "mojo_abi_alias": "UnitResult_is_ok_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "UnitResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "UnitResult",
+      "rust_name": "error_utf8_len",
+      "abi_name": "rust_mojo__zip__UnitResult_error_utf8_len",
+      "mojo_abi_alias": "UnitResult_error_utf8_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "UnitResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "UnitResult",
+      "rust_name": "error_utf8_copy",
+      "abi_name": "rust_mojo__zip__UnitResult_error_utf8_copy",
+      "mojo_abi_alias": "UnitResult_error_utf8_copy_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "UnitResult",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "ZipBytes",
+      "rust_name": "len",
+      "abi_name": "rust_mojo__zip__ZipBytes_len",
+      "mojo_abi_alias": "ZipBytes_len_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipBytes",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "ZipBytes",
+      "rust_name": "fill",
+      "abi_name": "rust_mojo__zip__ZipBytes_fill",
+      "mojo_abi_alias": "ZipBytes_fill_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipBytes",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "buffer_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "buffer_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "u_int"
+      }
+    },
+    {
+      "owner": "ZipWriter",
+      "rust_name": "new",
+      "abi_name": "rust_mojo__zip__ZipWriter_new",
+      "mojo_abi_alias": "ZipWriter_new_abi",
+      "params": [],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "ZipWriter",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "ZipWriter",
+      "rust_name": "is_finished",
+      "abi_name": "rust_mojo__zip__ZipWriter_is_finished",
+      "mojo_abi_alias": "ZipWriter_is_finished_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipWriter",
+              "mutable": false,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "primitive",
+        "details": "bool"
+      }
+    },
+    {
+      "owner": "ZipWriter",
+      "rust_name": "add_file",
+      "abi_name": "rust_mojo__zip__ZipWriter_add_file",
+      "mojo_abi_alias": "ZipWriter_add_file_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipWriter",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "name_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "name_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "data_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "data_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "compression",
+          "ty": {
+            "kind": "enum",
+            "details": "Compression"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "UnitResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "ZipWriter",
+      "rust_name": "add_directory",
+      "abi_name": "rust_mojo__zip__ZipWriter_add_directory",
+      "mojo_abi_alias": "ZipWriter_add_directory_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipWriter",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "name_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "name_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "UnitResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "ZipWriter",
+      "rust_name": "set_comment",
+      "abi_name": "rust_mojo__zip__ZipWriter_set_comment",
+      "mojo_abi_alias": "ZipWriter_set_comment_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipWriter",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        },
+        {
+          "name": "data_address",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        },
+        {
+          "name": "data_length",
+          "ty": {
+            "kind": "primitive",
+            "details": "u_int"
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "UnitResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    },
+    {
+      "owner": "ZipWriter",
+      "rust_name": "finish",
+      "abi_name": "rust_mojo__zip__ZipWriter_finish",
+      "mojo_abi_alias": "ZipWriter_finish_abi",
+      "params": [
+        {
+          "name": "self",
+          "ty": {
+            "kind": "opaque_pointer",
+            "details": {
+              "name": "ZipWriter",
+              "mutable": true,
+              "owned": false,
+              "optional": false
+            }
+          }
+        }
+      ],
+      "output": {
+        "kind": "opaque_pointer",
+        "details": {
+          "name": "BytesResult",
+          "mutable": true,
+          "owned": true,
+          "optional": false
+        }
+      }
+    }
+  ],
+  "types": [
+    {
+      "kind": "primitive",
+      "details": "bool"
+    },
+    {
+      "kind": "primitive",
+      "details": "u_int16"
+    },
+    {
+      "kind": "primitive",
+      "details": "u_int32"
+    },
+    {
+      "kind": "primitive",
+      "details": "u_int64"
+    },
+    {
+      "kind": "primitive",
+      "details": "u_int"
+    },
+    {
+      "kind": "enum",
+      "details": "Compression"
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "Archive",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "Archive",
+        "mutable": true,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "Archive",
+        "mutable": true,
+        "owned": true,
+        "optional": true
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ArchiveResult",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ArchiveResult",
+        "mutable": true,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ArchiveResult",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "BytesResult",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "BytesResult",
+        "mutable": true,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "BytesResult",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "CountResult",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "CountResult",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "Entry",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "Entry",
+        "mutable": true,
+        "owned": true,
+        "optional": true
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "EntryResult",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "EntryResult",
+        "mutable": true,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "EntryResult",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "UnitResult",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "UnitResult",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ZipBytes",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ZipBytes",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ZipBytes",
+        "mutable": true,
+        "owned": true,
+        "optional": true
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ZipWriter",
+        "mutable": false,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ZipWriter",
+        "mutable": true,
+        "owned": false,
+        "optional": false
+      }
+    },
+    {
+      "kind": "opaque_pointer",
+      "details": {
+        "name": "ZipWriter",
+        "mutable": true,
+        "owned": true,
+        "optional": false
+      }
+    }
+  ],
+  "unsupported": []
+}

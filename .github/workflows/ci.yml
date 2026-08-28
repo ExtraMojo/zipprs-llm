@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test and package (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            platform: linux-64
+          - runner: ubuntu-24.04-arm
+            platform: linux-aarch64
+          - runner: macos-15
+            platform: osx-arm64
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the locked Pixi environment
+        uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
+        with:
+          pixi-version: v0.77.1
+          cache: true
+          cache-write: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          frozen: true
+
+      - name: Show toolchain details
+        run: |
+          pixi --version
+          pixi run mojo --version
+          pixi info
+
+      - name: Verify generated binding provenance
+        run: pixi run check-generated
+
+      - name: Check Mojo formatting
+        if: matrix.platform == 'linux-64'
+        run: |
+          pixi run format
+          git diff --exit-code -- \
+            ziprs \
+            tests \
+            examples \
+            ci/git-consumer/ziprs_ci_consumer \
+            ci/git-consumer/tests
+
+      - name: Run library tests
+        run: pixi run t
+
+      - name: Run reading and writing examples
+        run: |
+          archive_path="${RUNNER_TEMP}/ziprs-ci-example.zip"
+          pixi run mojo run examples/write.mojo "${archive_path}"
+          pixi run mojo run examples/read.mojo "${archive_path}"
+          test -s "${archive_path}"
+
+      - name: Test a downstream pixi-build-mojo Git dependency
+        if: matrix.platform == 'linux-64'
+        run: python3 ci/test_git_dependency.py --platform "${{ matrix.platform }}"
+
+      - name: Build both publishable packages
+        run: |
+          artifact_dir="${RUNNER_TEMP}/ziprs-artifacts"
+          pixi publish --target-dir "${artifact_dir}"
+          artifact_count="$(find "${artifact_dir}" -maxdepth 1 -type f -name '*.conda' | wc -l | tr -d ' ')"
+          if [[ "${artifact_count}" != "2" ]]; then
+            echo "expected two .conda packages, found ${artifact_count}" >&2
+            exit 1
+          fi
+
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ziprs-${{ matrix.platform }}
+          path: ${{ runner.temp }}/ziprs-artifacts/*.conda
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7

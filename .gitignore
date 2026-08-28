@@ -1,0 +1,14 @@
+# pixi environments
+.pixi/
+!.pixi/config.toml
+
+# hat
+target/
+
+# Mojo packages
+*.mojoc
+*.mojopkg
+
+# Python tooling caches
+__pycache__/
+*.py[cod]

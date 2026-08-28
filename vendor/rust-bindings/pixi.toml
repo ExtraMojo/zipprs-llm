@@ -1,0 +1,15 @@
+# GENERATED FILE - DO NOT EDIT DIRECTLY
+# Generator: rust-mojo-binding-integrator 0.1.0
+
+[package]
+name = "ziprs-rust-mojo-bindings"
+version = "0.1.0"
+description = "Generated Rust-to-Mojo bindings for the parent project."
+publish = true
+
+
+[package.build]
+backend = { name = "pixi-build-rattler-build", version = "0.*", channels = [
+    "https://prefix.dev/pixi-build-backends",
+    "https://prefix.dev/conda-forge",
+] }

@@ -1,0 +1,15 @@
+[package]
+name = "ziprs_zip_ffi"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+publish = false
+
+[lib]
+name = "ziprs_zip_ffi"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+diplomat = "=0.16.1"
+diplomat-runtime = "=0.16.0"
+zip = { version = "=8.6.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }

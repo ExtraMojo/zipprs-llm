@@ -1,0 +1,90 @@
+{
+  "binding": {
+    "id": "zip",
+    "mojo_package": "ziprs_native"
+  },
+  "crate": {
+    "checksum": "2d04a6b5381502aa6087c94c669499eb1602eb9c5e8198e534de571f7154809b",
+    "default_features": false,
+    "features": [
+      "deflate-flate2-zlib-rs"
+    ],
+    "name": "zip",
+    "source_kind": "registry",
+    "version": "=8.6.0"
+  },
+  "ffi": {
+    "cargo_lock": "ffi/Cargo.lock",
+    "cargo_manifest": "ffi/Cargo.toml",
+    "crate_name": "ziprs_zip_ffi",
+    "tests": [
+      "ffi/tests/bridge.rs"
+    ]
+  },
+  "generated_files": {
+    "abi-report.json": "8a545fc46868eea33d131867743f0272b1ecd1190078cb81e7de4b1d8a586bce",
+    "binding.toml": "9eeb63c7666651fecc074b9416285292f85415f087965f610e7e77f25c5e6e39",
+    "ffi/Cargo.lock": "fee04ef1841dfc284e9d6e9933e3792a30706a6bc9756ad63d0da3b38334fe60",
+    "ffi/Cargo.toml": "73f73e2fac25df5629059fa352e5ba0d6b210fcda79a2c139eb9338b565e4612",
+    "ffi/src/lib.rs": "b03b9a45503cd0d937eb807508d7e7fca1d9a8c1d452c6b860a800ed0242f9e4",
+    "ffi/tests/bridge.rs": "2978388411f2a0e39c6024229202e47de57b0024ec56c110aa9a3338cc535b10",
+    "mojo/ziprs_native/__init__.mojo": "e4216ddbd7bdd9c607ceacaf7f04846b7b228e06577a23f88f9f93496abede4a",
+    "mojo/ziprs_native/_ffi.mojo": "7f82e97c3a3b0421c0964147136d75b744de8871f390bfbb967e2355bfcdccd2",
+    "mojo/ziprs_native/_runtime.mojo": "fa119fd0762a6693602367264a2b24e4c2be3605926d7ff17081433fdee263b5",
+    "mojo/ziprs_native/_types.mojo": "cd08d8315ad633eb68e11c690c584317e2dc983d3512cb13499daad228f62e85",
+    "mojo/ziprs_native/_wrappers.mojo": "9a5eb46f13e3727089a59c87487efaa155bf31264b401cf685aee75810559a6a",
+    "tests/smoke.mojo": "072707a7662ab6fc860dc22c6b3ca0bc3c4d4d0cc283b768cf602d9e8ae23db4"
+  },
+  "generated_modes": {
+    "abi-report.json": 420,
+    "binding.toml": 420,
+    "ffi/Cargo.lock": 420,
+    "ffi/Cargo.toml": 420,
+    "ffi/src/lib.rs": 420,
+    "ffi/tests/bridge.rs": 420,
+    "mojo/ziprs_native/__init__.mojo": 420,
+    "mojo/ziprs_native/_ffi.mojo": 420,
+    "mojo/ziprs_native/_runtime.mojo": 420,
+    "mojo/ziprs_native/_types.mojo": 420,
+    "mojo/ziprs_native/_wrappers.mojo": 420,
+    "tests/smoke.mojo": 420
+  },
+  "generator": {
+    "name": "rust-mojo-binding-integrator",
+    "sha256": "e9f7048e590922d6615b02022faab329f3bfe44608c0fb22c10ba554f51d1686",
+    "version": "0.1.0"
+  },
+  "mojo": {
+    "source_dir": "mojo/ziprs_native",
+    "tests": [
+      "tests/smoke.mojo"
+    ]
+  },
+  "resolution": {
+    "request": {
+      "default_features": false,
+      "features": [
+        "deflate-flate2-zlib-rs"
+      ],
+      "kind": "registry",
+      "name": "zip",
+      "version": "=8.6.0"
+    },
+    "resolved": {
+      "checksum": "2d04a6b5381502aa6087c94c669499eb1602eb9c5e8198e534de571f7154809b",
+      "name": "zip",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "version": "8.6.0"
+    },
+    "schema_version": 1
+  },
+  "schema_version": 1,
+  "tools": {
+    "abi_backend_version": "0.1.0",
+    "diplomat_core_version": "0.16.1",
+    "diplomat_runtime_version": "0.16.0",
+    "diplomat_version": "0.16.1",
+    "generator_version": "0.1.0",
+    "mojo_version": "1.0.0"
+  }
+}

@@ -1,0 +1,1186 @@
+schema_version = 1
+
+[binding]
+id = "zip"
+mojo_package = "ziprs_native"
+symbol_prefix = "rust_mojo__zip__"
+
+[crate]
+name = "zip"
+version = "=8.6.0"
+source_kind = "registry"
+features = ["deflate-flate2-zlib-rs"]
+default_features = false
+checksum = "2d04a6b5381502aa6087c94c669499eb1602eb9c5e8198e534de571f7154809b"
+
+[ffi]
+crate_name = "ziprs_zip_ffi"
+cargo_manifest = "ffi/Cargo.toml"
+tests = ["ffi/tests/bridge.rs"]
+
+[mojo]
+source_dir = "mojo/ziprs_native"
+tests = ["tests/smoke.mojo"]
+
+[pixi]
+build_dependencies = []
+host_dependencies = []
+run_dependencies = []
+
+[scope]
+requested = [
+  "Byte-oriented ZipArchive open, metadata, lookup, entry read, and bulk read",
+  "In-memory ZipWriter construction, file/directory insertion, comment, and finish",
+  "Stored and Deflate compression through deflate-flate2-zlib-rs",
+]
+trait_policy = "Only Read and Write behavior needed by the approved whole-entry byte API is adapted; Rust I/O traits are not themselves exposed."
+audited_exports = [
+  "compression.type",
+  "archive.type",
+  "archive.open",
+  "archive.len",
+  "archive.is-empty",
+  "archive.index-for-name",
+  "archive.entry",
+  "archive.read",
+  "archive.read-into",
+  "archive.comment",
+  "entry.type",
+  "entry.name",
+  "entry.enclosed-name",
+  "entry.comment",
+  "entry.compressed-size",
+  "entry.size",
+  "entry.crc32",
+  "entry.compression-code",
+  "entry.compression-name",
+  "entry.is-dir",
+  "entry.is-file",
+  "entry.is-symlink",
+  "entry.unix-mode",
+  "bytes.type",
+  "bytes.len",
+  "bytes.fill",
+  "writer.type",
+  "writer.new",
+  "writer.is-finished",
+  "writer.add-file",
+  "writer.add-directory",
+  "writer.set-comment",
+  "writer.finish",
+  "archive-result.type",
+  "archive-result.is-ok",
+  "archive-result.error",
+  "archive-result.take",
+  "entry-result.type",
+  "entry-result.is-ok",
+  "entry-result.error",
+  "entry-result.take",
+  "bytes-result.type",
+  "bytes-result.is-ok",
+  "bytes-result.error",
+  "bytes-result.take",
+  "unit-result.type",
+  "unit-result.is-ok",
+  "unit-result.error",
+  "count-result.type",
+  "count-result.is-ok",
+  "count-result.value",
+  "count-result.error",
+  "deferred.filesystem-extraction",
+  "deferred.streaming-read",
+  "deferred.streaming-write",
+  "deferred.encryption",
+  "deferred.additional-codecs",
+  "deferred.append-and-copy",
+  "deferred.extra-fields",
+  "deferred.unstable",
+  "deferred.unrequested-traits",
+]
+
+[tools]
+generator_version = "0.1.0"
+abi_backend_version = "0.1.0"
+diplomat_version = "0.16.1"
+diplomat_core_version = "0.16.1"
+diplomat_runtime_version = "0.16.0"
+mojo_version = "1.0.0"
+
+[[specializations]]
+rust_type = "zip::ZipArchive<R>"
+mojo_name = "Archive"
+parameters = { R = "std::io::Cursor<Vec<u8>>" }
+exports = [
+  "archive.type",
+  "archive.open",
+  "archive.len",
+  "archive.is-empty",
+  "archive.index-for-name",
+  "archive.entry",
+  "archive.read",
+  "archive.read-into",
+  "archive.comment",
+]
+chosen_by = "user"
+
+[[specializations]]
+rust_type = "zip::ZipWriter<W>"
+mojo_name = "ZipWriter"
+parameters = { W = "std::io::Cursor<Vec<u8>>" }
+exports = [
+  "writer.type",
+  "writer.new",
+  "writer.is-finished",
+  "writer.add-file",
+  "writer.add-directory",
+  "writer.set-comment",
+  "writer.finish",
+]
+chosen_by = "user"
+
+[[specializations]]
+rust_type = "zip::write::FileOptions<'k, T>"
+mojo_name = "SimpleFileOptions"
+parameters = { lifetime = "'static", T = "()" }
+exports = ["writer.add-file", "writer.add-directory"]
+chosen_by = "user"
+
+[[adaptations]]
+export = "compression.type"
+rust = "zip::CompressionMethod"
+mojo = "Compression"
+kind = "fieldless-write-subset"
+effect = "Exposes only Stored and Deflated for writing; entry metadata still reports every method by numeric ZIP code and name."
+chosen_by = "user"
+
+[[adaptations]]
+export = "archive.open"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::new"
+mojo = "Archive.open"
+kind = "copied-byte-input-with-dynamic-result"
+effect = "Copies the caller's archive bytes into a Rust-owned seekable cursor and preserves parse errors as dynamic messages."
+chosen_by = "user"
+
+[[adaptations]]
+export = "archive.entry"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::by_index"
+mojo = "Archive.entry"
+kind = "owned-metadata-snapshot"
+effect = "Copies entry metadata into an independent opaque owner so no borrowed ZipFile lifetime crosses the ABI."
+chosen_by = "user"
+
+[[adaptations]]
+export = "archive.read"
+rust = "std::io::Read::read_to_end(zip::read::ZipFile)"
+mojo = "Archive.read_entry"
+kind = "whole-entry-materialization"
+effect = "Decompresses the selected entry into a Rust-owned byte buffer instead of exposing a streaming Rust reader."
+chosen_by = "user"
+
+[[adaptations]]
+export = "archive.read-into"
+rust = "std::io::Read::read_exact(zip::read::ZipFile)"
+mojo = "Archive.read_into"
+kind = "caller-owned-exact-buffer"
+effect = "Decompresses directly into a caller-owned mutable span whose length must equal the declared entry size."
+chosen_by = "user"
+
+[[adaptations]]
+export = "archive.comment"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::comment"
+mojo = "Archive.comment"
+kind = "owned-byte-copy"
+effect = "Copies the borrowed raw archive comment into an independent ZipBytes owner."
+chosen_by = "user"
+
+[[adaptations]]
+export = "entry.type"
+rust = "zip::read::ZipFile<'a, std::io::Cursor<Vec<u8>>>"
+mojo = "Entry"
+kind = "owned-metadata-snapshot"
+effect = "The exposed Entry owns copied metadata and has no borrow relationship with its Archive."
+chosen_by = "user"
+
+[[adaptations]]
+export = "bytes.type"
+rust = "Vec<u8>"
+mojo = "ZipBytes"
+kind = "opaque-owned-byte-buffer"
+effect = "Keeps the owned collection behind Rust and exposes length plus bulk fill rather than a by-value slice carrier."
+chosen_by = "user"
+
+[[adaptations]]
+export = "writer.add-file"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::start_file + std::io::Write::write_all"
+mojo = "ZipWriter.add_file"
+kind = "whole-file-write"
+effect = "Combines file start and complete payload write into one fallible call over a borrowed Mojo byte span."
+chosen_by = "user"
+
+[[adaptations]]
+export = "writer.add-directory"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::add_directory"
+mojo = "ZipWriter.add_directory"
+kind = "utf8-path-input"
+effect = "Accepts a Mojo UTF-8 string and uses Stored options for the directory entry."
+chosen_by = "user"
+
+[[adaptations]]
+export = "writer.set-comment"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::set_comment"
+mojo = "ZipWriter.set_comment"
+kind = "utf8-comment-input"
+effect = "Exposes the upstream UTF-8 archive comment operation as a fallible Mojo method."
+chosen_by = "user"
+
+[[adaptations]]
+export = "writer.finish"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::finish"
+mojo = "ZipWriter.finish"
+kind = "single-shot-owned-byte-result"
+effect = "Consumes the internal writer state once and returns the completed archive as ZipBytes with dynamic errors."
+chosen_by = "user"
+
+[[exports]]
+id = "compression.type"
+rust = "zip::CompressionMethod"
+mojo = "Compression"
+status = "ADAPTED"
+reason = "A fieldless write-safe subset avoids the payload-bearing Unsupported variant."
+
+[[exports]]
+id = "archive.type"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>"
+mojo = "Archive"
+status = "OPAQUE"
+reason = "The generic Rust reader and private archive layout remain behind a uniquely owned handle."
+
+[[exports]]
+id = "archive.open"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::new"
+mojo = "Archive.open"
+status = "ADAPTED"
+reason = "A copied Mojo byte span becomes the concrete seekable reader and errors retain dynamic text."
+
+[[exports]]
+id = "archive.len"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::len"
+mojo = "Archive.len"
+status = "MONOMORPHIZED"
+reason = "The method is direct after selecting Cursor<Vec<u8>> as R."
+
+[[exports]]
+id = "archive.is-empty"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::is_empty"
+mojo = "Archive.is_empty"
+status = "MONOMORPHIZED"
+reason = "The method is direct after selecting Cursor<Vec<u8>> as R."
+
+[[exports]]
+id = "archive.index-for-name"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::index_for_name"
+mojo = "Archive.index_for_name"
+status = "MONOMORPHIZED"
+reason = "The selected archive reader exposes the normal missing-name outcome as Optional[Int]."
+
+[[exports]]
+id = "archive.entry"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::by_index"
+mojo = "Archive.entry"
+status = "ADAPTED"
+reason = "Borrowed ZipFile metadata is copied into an independently owned Entry."
+
+[[exports]]
+id = "archive.read"
+rust = "std::io::Read::read_to_end(zip::read::ZipFile)"
+mojo = "Archive.read_entry"
+status = "ADAPTED"
+reason = "The Rust reader is deliberately materialized as an owned byte buffer."
+
+[[exports]]
+id = "archive.read-into"
+rust = "std::io::Read::read_exact(zip::read::ZipFile)"
+mojo = "Archive.read_into"
+status = "ADAPTED"
+reason = "Streaming read behavior becomes a single exact-size bulk fill into caller memory."
+
+[[exports]]
+id = "archive.comment"
+rust = "zip::ZipArchive<std::io::Cursor<Vec<u8>>>::comment"
+mojo = "Archive.comment"
+status = "ADAPTED"
+reason = "The borrowed raw comment becomes an owned ZipBytes value."
+
+[[exports]]
+id = "entry.type"
+rust = "zip::read::ZipFile<'a, std::io::Cursor<Vec<u8>>>"
+mojo = "Entry"
+status = "ADAPTED"
+reason = "The borrowed ZipFile becomes an owned metadata snapshot."
+
+[[exports]]
+id = "entry.name"
+rust = "zip::read::ZipFile::name"
+mojo = "Entry.name"
+status = "DIRECT"
+reason = "The decoded UTF-8 name is copied without semantic change."
+
+[[exports]]
+id = "entry.enclosed-name"
+rust = "zip::read::ZipFile::enclosed_name"
+mojo = "Entry.enclosed_name"
+status = "DIRECT"
+reason = "A safe path remains optional and is rendered as UTF-8 text."
+
+[[exports]]
+id = "entry.comment"
+rust = "zip::read::ZipFile::comment"
+mojo = "Entry.comment"
+status = "DIRECT"
+reason = "The UTF-8 entry comment is copied without semantic change."
+
+[[exports]]
+id = "entry.compressed-size"
+rust = "zip::read::ZipFile::compressed_size"
+mojo = "Entry.compressed_size"
+status = "DIRECT"
+reason = "The u64 value crosses directly."
+
+[[exports]]
+id = "entry.size"
+rust = "zip::read::ZipFile::size"
+mojo = "Entry.size"
+status = "DIRECT"
+reason = "The u64 value crosses directly."
+
+[[exports]]
+id = "entry.crc32"
+rust = "zip::read::ZipFile::crc32"
+mojo = "Entry.crc32"
+status = "DIRECT"
+reason = "The u32 value crosses directly."
+
+[[exports]]
+id = "entry.compression-code"
+rust = "zip::CompressionMethod::to_u16"
+mojo = "Entry.compression_code"
+status = "DIRECT"
+reason = "The ZIP method identifier is preserved as u16, including unsupported methods."
+
+[[exports]]
+id = "entry.compression-name"
+rust = "zip::CompressionMethod::name_from_u16"
+mojo = "Entry.compression_name"
+status = "DIRECT"
+reason = "The upstream stable display name is copied as UTF-8."
+
+[[exports]]
+id = "entry.is-dir"
+rust = "zip::read::ZipFile::is_dir"
+mojo = "Entry.is_dir"
+status = "DIRECT"
+reason = "The boolean value crosses directly."
+
+[[exports]]
+id = "entry.is-file"
+rust = "zip::read::ZipFile::is_file"
+mojo = "Entry.is_file"
+status = "DIRECT"
+reason = "The boolean value crosses directly."
+
+[[exports]]
+id = "entry.is-symlink"
+rust = "zip::read::ZipFile::is_symlink"
+mojo = "Entry.is_symlink"
+status = "DIRECT"
+reason = "The boolean value crosses directly."
+
+[[exports]]
+id = "entry.unix-mode"
+rust = "zip::read::ZipFile::unix_mode"
+mojo = "Entry.unix_mode"
+status = "DIRECT"
+reason = "The optional u32 value remains Optional[UInt32]."
+
+[[exports]]
+id = "bytes.type"
+rust = "Vec<u8>"
+mojo = "ZipBytes"
+status = "ADAPTED"
+reason = "Owned bytes stay opaque and use scalar length plus caller-owned bulk fill."
+
+[[exports]]
+id = "bytes.len"
+rust = "Vec<u8>::len"
+mojo = "ZipBytes.len"
+status = "DIRECT"
+reason = "The collection length crosses directly."
+
+[[exports]]
+id = "bytes.fill"
+rust = "Vec<u8>::as_slice"
+mojo = "ZipBytes.fill"
+status = "DIRECT"
+reason = "Bytes are copied in bulk into a caller-owned mutable span."
+
+[[exports]]
+id = "writer.type"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>"
+mojo = "ZipWriter"
+status = "OPAQUE"
+reason = "The generic writer, cursor, and in-progress archive state stay behind a unique handle."
+
+[[exports]]
+id = "writer.new"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::new"
+mojo = "ZipWriter"
+status = "MONOMORPHIZED"
+reason = "The constructor selects Cursor<Vec<u8>> as W."
+
+[[exports]]
+id = "writer.is-finished"
+rust = "ziprs_zip_ffi::ZipWriter::is_finished"
+mojo = "ZipWriter.is_finished"
+status = "DIRECT"
+reason = "Reports whether the bridge's single-shot writer state has been consumed."
+
+[[exports]]
+id = "writer.add-file"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::start_file + std::io::Write::write_all"
+mojo = "ZipWriter.add_file"
+status = "ADAPTED"
+reason = "Start and whole-payload write are one fallible operation."
+
+[[exports]]
+id = "writer.add-directory"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::add_directory"
+mojo = "ZipWriter.add_directory"
+status = "ADAPTED"
+reason = "The UTF-8 name is paired with Stored SimpleFileOptions."
+
+[[exports]]
+id = "writer.set-comment"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::set_comment"
+mojo = "ZipWriter.set_comment"
+status = "ADAPTED"
+reason = "The UTF-8 Mojo string becomes the upstream comment input with dynamic errors."
+
+[[exports]]
+id = "writer.finish"
+rust = "zip::ZipWriter<std::io::Cursor<Vec<u8>>>::finish"
+mojo = "ZipWriter.finish"
+status = "ADAPTED"
+reason = "The backing cursor is consumed once and its Vec becomes ZipBytes."
+
+[[exports]]
+id = "archive-result.type"
+rust = "ziprs_zip_ffi::ArchiveResult"
+mojo = "ArchiveResult"
+status = "OPAQUE"
+reason = "Carries an owned archive or dynamic parse error across the scalar ABI."
+
+[[exports]]
+id = "archive-result.is-ok"
+rust = "ziprs_zip_ffi::ArchiveResult::is_ok"
+mojo = "ArchiveResult.is_ok"
+status = "DIRECT"
+reason = "Reports whether the carrier contains a value."
+
+[[exports]]
+id = "archive-result.error"
+rust = "ziprs_zip_ffi::ArchiveResult::error"
+mojo = "ArchiveResult.error"
+status = "DIRECT"
+reason = "Copies the stored dynamic error as UTF-8."
+
+[[exports]]
+id = "archive-result.take"
+rust = "ziprs_zip_ffi::ArchiveResult::take"
+mojo = "ArchiveResult.take"
+status = "DIRECT"
+reason = "Transfers the successful value once and raises on misuse."
+
+[[exports]]
+id = "entry-result.type"
+rust = "ziprs_zip_ffi::EntryResult"
+mojo = "EntryResult"
+status = "OPAQUE"
+reason = "Carries an owned entry snapshot or dynamic lookup error."
+
+[[exports]]
+id = "entry-result.is-ok"
+rust = "ziprs_zip_ffi::EntryResult::is_ok"
+mojo = "EntryResult.is_ok"
+status = "DIRECT"
+reason = "Reports whether the carrier contains a value."
+
+[[exports]]
+id = "entry-result.error"
+rust = "ziprs_zip_ffi::EntryResult::error"
+mojo = "EntryResult.error"
+status = "DIRECT"
+reason = "Copies the stored dynamic error as UTF-8."
+
+[[exports]]
+id = "entry-result.take"
+rust = "ziprs_zip_ffi::EntryResult::take"
+mojo = "EntryResult.take"
+status = "DIRECT"
+reason = "Transfers the successful value once and raises on misuse."
+
+[[exports]]
+id = "bytes-result.type"
+rust = "ziprs_zip_ffi::BytesResult"
+mojo = "BytesResult"
+status = "OPAQUE"
+reason = "Carries owned bytes or a dynamic read/finish error."
+
+[[exports]]
+id = "bytes-result.is-ok"
+rust = "ziprs_zip_ffi::BytesResult::is_ok"
+mojo = "BytesResult.is_ok"
+status = "DIRECT"
+reason = "Reports whether the carrier contains a value."
+
+[[exports]]
+id = "bytes-result.error"
+rust = "ziprs_zip_ffi::BytesResult::error"
+mojo = "BytesResult.error"
+status = "DIRECT"
+reason = "Copies the stored dynamic error as UTF-8."
+
+[[exports]]
+id = "bytes-result.take"
+rust = "ziprs_zip_ffi::BytesResult::take"
+mojo = "BytesResult.take"
+status = "DIRECT"
+reason = "Transfers the successful value once and raises on misuse."
+
+[[exports]]
+id = "unit-result.type"
+rust = "ziprs_zip_ffi::UnitResult"
+mojo = "UnitResult"
+status = "OPAQUE"
+reason = "Carries success or a dynamic mutation error."
+
+[[exports]]
+id = "unit-result.is-ok"
+rust = "ziprs_zip_ffi::UnitResult::is_ok"
+mojo = "UnitResult.is_ok"
+status = "DIRECT"
+reason = "Reports whether the operation succeeded."
+
+[[exports]]
+id = "unit-result.error"
+rust = "ziprs_zip_ffi::UnitResult::error"
+mojo = "UnitResult.error"
+status = "DIRECT"
+reason = "Copies the stored dynamic error as UTF-8."
+
+[[exports]]
+id = "count-result.type"
+rust = "ziprs_zip_ffi::CountResult"
+mojo = "CountResult"
+status = "OPAQUE"
+reason = "Carries a bulk copied count or dynamic read error."
+
+[[exports]]
+id = "count-result.is-ok"
+rust = "ziprs_zip_ffi::CountResult::is_ok"
+mojo = "CountResult.is_ok"
+status = "DIRECT"
+reason = "Reports whether the operation succeeded."
+
+[[exports]]
+id = "count-result.value"
+rust = "ziprs_zip_ffi::CountResult::value"
+mojo = "CountResult.value"
+status = "DIRECT"
+reason = "Returns the copied byte count after success."
+
+[[exports]]
+id = "count-result.error"
+rust = "ziprs_zip_ffi::CountResult::error"
+mojo = "CountResult.error"
+status = "DIRECT"
+reason = "Copies the stored dynamic error as UTF-8."
+
+[[exports]]
+id = "deferred.filesystem-extraction"
+rust = "zip::ZipArchive::extract and extract_unwrapped_root_dir"
+status = "SKIPPED"
+reason = "Filesystem mutation and extraction policy are outside the approved byte-oriented v0.1 scope."
+
+[[exports]]
+id = "deferred.streaming-read"
+rust = "zip::read streaming APIs and std::io::Read on ZipFile"
+status = "SKIPPED"
+reason = "The approved v0.1 API uses whole-entry materialization or exact bulk fill."
+
+[[exports]]
+id = "deferred.streaming-write"
+rust = "std::io::Write on zip::ZipWriter and ZipWriter::new_stream"
+status = "SKIPPED"
+reason = "The approved v0.1 API adds one complete byte payload per file."
+
+[[exports]]
+id = "deferred.encryption"
+rust = "zip AES and ZipCrypto read/write APIs"
+status = "SKIPPED"
+reason = "aes-crypto is disabled and encryption was explicitly deferred."
+
+[[exports]]
+id = "deferred.additional-codecs"
+rust = "zip bzip2, deflate64, lzma, ppmd, xz, and zstd features"
+status = "SKIPPED"
+reason = "v0.1 intentionally enables only Stored and Deflate support."
+
+[[exports]]
+id = "deferred.append-and-copy"
+rust = "zip::ZipWriter append, merge, raw-copy, deep-copy, and shallow-copy APIs"
+status = "SKIPPED"
+reason = "Archive editing and copying are outside the approved v0.1 scope."
+
+[[exports]]
+id = "deferred.extra-fields"
+rust = "zip::extra_fields and extended FileOptions APIs"
+status = "SKIPPED"
+reason = "Extra-field construction and inspection were not requested for v0.1."
+
+[[exports]]
+id = "deferred.unstable"
+rust = "zip::unstable"
+status = "SKIPPED"
+reason = "Unstable upstream APIs are excluded from the reusable package contract."
+
+[[exports]]
+id = "deferred.unrequested-traits"
+rust = "unrequested public trait implementations and generic I/O traits"
+status = "SKIPPED"
+reason = "Only trait behavior explicitly adapted above is in scope."
+
+[[mojo.types]]
+abi_name = "Compression"
+mojo_name = "Compression"
+kind = "enum"
+export = "compression.type"
+
+[[mojo.types]]
+abi_name = "Archive"
+mojo_name = "Archive"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__Archive_destroy"
+export = "archive.type"
+
+[[mojo.types]]
+abi_name = "Entry"
+mojo_name = "Entry"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__Entry_destroy"
+export = "entry.type"
+
+[[mojo.types]]
+abi_name = "ZipBytes"
+mojo_name = "ZipBytes"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__ZipBytes_destroy"
+export = "bytes.type"
+
+[[mojo.types]]
+abi_name = "ZipWriter"
+mojo_name = "ZipWriter"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__ZipWriter_destroy"
+export = "writer.type"
+
+[[mojo.types]]
+abi_name = "ArchiveResult"
+mojo_name = "ArchiveResult"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__ArchiveResult_destroy"
+export = "archive-result.type"
+
+[[mojo.types]]
+abi_name = "EntryResult"
+mojo_name = "EntryResult"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__EntryResult_destroy"
+export = "entry-result.type"
+
+[[mojo.types]]
+abi_name = "BytesResult"
+mojo_name = "BytesResult"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__BytesResult_destroy"
+export = "bytes-result.type"
+
+[[mojo.types]]
+abi_name = "UnitResult"
+mojo_name = "UnitResult"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__UnitResult_destroy"
+export = "unit-result.type"
+
+[[mojo.types]]
+abi_name = "CountResult"
+mojo_name = "CountResult"
+kind = "opaque"
+destroy_abi_symbol = "rust_mojo__zip__CountResult_destroy"
+export = "count-result.type"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "open"
+abi_symbol = "rust_mojo__zip__Archive_open"
+mojo_name = "open"
+kind = "static"
+scalarized_params = [
+  { name = "data", kind = "borrowed-primitive-slice", element = "u_int8", data_param = "data_address", len_param = "data_length" },
+]
+export = "archive.open"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "len"
+abi_symbol = "rust_mojo__zip__Archive_len"
+mojo_name = "len"
+kind = "method"
+export = "archive.len"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "is_empty"
+abi_symbol = "rust_mojo__zip__Archive_is_empty"
+mojo_name = "is_empty"
+kind = "method"
+export = "archive.is-empty"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "has_name"
+abi_symbol = "rust_mojo__zip__Archive_has_name"
+kind = "skip"
+reason = "Presence companion for Optional index_for_name."
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "index_for_name"
+abi_symbol = "rust_mojo__zip__Archive_index_for_name"
+mojo_name = "index_for_name"
+kind = "method"
+scalarized_params = [
+  { name = "name", kind = "utf8-string", element = "u_int8", data_param = "name_address", len_param = "name_length" },
+]
+optional_via = { has_symbol = "rust_mojo__zip__Archive_has_name" }
+export = "archive.index-for-name"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "entry"
+abi_symbol = "rust_mojo__zip__Archive_entry"
+mojo_name = "entry"
+kind = "method"
+export = "archive.entry"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "read"
+abi_symbol = "rust_mojo__zip__Archive_read"
+mojo_name = "read_entry"
+kind = "method"
+export = "archive.read"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "read_into"
+abi_symbol = "rust_mojo__zip__Archive_read_into"
+mojo_name = "read_into"
+kind = "method"
+scalarized_params = [
+  { name = "buffer", kind = "mutable-primitive-slice", element = "u_int8", data_param = "buffer_address", len_param = "buffer_length" },
+]
+export = "archive.read-into"
+
+[[mojo.functions]]
+abi_owner = "Archive"
+rust_name = "comment"
+abi_symbol = "rust_mojo__zip__Archive_comment"
+mojo_name = "comment"
+kind = "method"
+export = "archive.comment"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "name_utf8_len"
+abi_symbol = "rust_mojo__zip__Entry_name_utf8_len"
+kind = "skip"
+reason = "Length companion for Entry.name."
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "name_utf8_copy"
+abi_symbol = "rust_mojo__zip__Entry_name_utf8_copy"
+mojo_name = "name"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__Entry_name_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "entry.name"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "has_enclosed_name"
+abi_symbol = "rust_mojo__zip__Entry_has_enclosed_name"
+kind = "skip"
+reason = "Presence companion for optional Entry.enclosed_name."
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "enclosed_name_utf8_len"
+abi_symbol = "rust_mojo__zip__Entry_enclosed_name_utf8_len"
+kind = "skip"
+reason = "Length companion for Entry.enclosed_name."
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "enclosed_name_utf8_copy"
+abi_symbol = "rust_mojo__zip__Entry_enclosed_name_utf8_copy"
+mojo_name = "enclosed_name"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__Entry_enclosed_name_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+optional_via = { has_symbol = "rust_mojo__zip__Entry_has_enclosed_name" }
+export = "entry.enclosed-name"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "comment_utf8_len"
+abi_symbol = "rust_mojo__zip__Entry_comment_utf8_len"
+kind = "skip"
+reason = "Length companion for Entry.comment."
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "comment_utf8_copy"
+abi_symbol = "rust_mojo__zip__Entry_comment_utf8_copy"
+mojo_name = "comment"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__Entry_comment_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "entry.comment"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "compressed_size"
+abi_symbol = "rust_mojo__zip__Entry_compressed_size"
+mojo_name = "compressed_size"
+kind = "method"
+export = "entry.compressed-size"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "size"
+abi_symbol = "rust_mojo__zip__Entry_size"
+mojo_name = "size"
+kind = "method"
+export = "entry.size"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "crc32"
+abi_symbol = "rust_mojo__zip__Entry_crc32"
+mojo_name = "crc32"
+kind = "method"
+export = "entry.crc32"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "compression_code"
+abi_symbol = "rust_mojo__zip__Entry_compression_code"
+mojo_name = "compression_code"
+kind = "method"
+export = "entry.compression-code"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "compression_name_utf8_len"
+abi_symbol = "rust_mojo__zip__Entry_compression_name_utf8_len"
+kind = "skip"
+reason = "Length companion for Entry.compression_name."
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "compression_name_utf8_copy"
+abi_symbol = "rust_mojo__zip__Entry_compression_name_utf8_copy"
+mojo_name = "compression_name"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__Entry_compression_name_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "entry.compression-name"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "is_dir"
+abi_symbol = "rust_mojo__zip__Entry_is_dir"
+mojo_name = "is_dir"
+kind = "method"
+export = "entry.is-dir"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "is_file"
+abi_symbol = "rust_mojo__zip__Entry_is_file"
+mojo_name = "is_file"
+kind = "method"
+export = "entry.is-file"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "is_symlink"
+abi_symbol = "rust_mojo__zip__Entry_is_symlink"
+mojo_name = "is_symlink"
+kind = "method"
+export = "entry.is-symlink"
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "has_unix_mode"
+abi_symbol = "rust_mojo__zip__Entry_has_unix_mode"
+kind = "skip"
+reason = "Presence companion for optional Entry.unix_mode."
+
+[[mojo.functions]]
+abi_owner = "Entry"
+rust_name = "unix_mode"
+abi_symbol = "rust_mojo__zip__Entry_unix_mode"
+mojo_name = "unix_mode"
+kind = "method"
+optional_via = { has_symbol = "rust_mojo__zip__Entry_has_unix_mode" }
+export = "entry.unix-mode"
+
+[[mojo.functions]]
+abi_owner = "ZipBytes"
+rust_name = "len"
+abi_symbol = "rust_mojo__zip__ZipBytes_len"
+mojo_name = "len"
+kind = "method"
+export = "bytes.len"
+
+[[mojo.functions]]
+abi_owner = "ZipBytes"
+rust_name = "fill"
+abi_symbol = "rust_mojo__zip__ZipBytes_fill"
+mojo_name = "fill"
+kind = "method"
+scalarized_params = [
+  { name = "buffer", kind = "mutable-primitive-slice", element = "u_int8", data_param = "buffer_address", len_param = "buffer_length" },
+]
+export = "bytes.fill"
+
+[[mojo.functions]]
+abi_owner = "ZipWriter"
+rust_name = "new"
+abi_symbol = "rust_mojo__zip__ZipWriter_new"
+mojo_name = "__init__"
+kind = "constructor"
+export = "writer.new"
+
+[[mojo.functions]]
+abi_owner = "ZipWriter"
+rust_name = "is_finished"
+abi_symbol = "rust_mojo__zip__ZipWriter_is_finished"
+mojo_name = "is_finished"
+kind = "method"
+export = "writer.is-finished"
+
+[[mojo.functions]]
+abi_owner = "ZipWriter"
+rust_name = "add_file"
+abi_symbol = "rust_mojo__zip__ZipWriter_add_file"
+mojo_name = "add_file"
+kind = "method"
+scalarized_params = [
+  { name = "name", kind = "utf8-string", element = "u_int8", data_param = "name_address", len_param = "name_length" },
+  { name = "data", kind = "borrowed-primitive-slice", element = "u_int8", data_param = "data_address", len_param = "data_length" },
+]
+export = "writer.add-file"
+
+[[mojo.functions]]
+abi_owner = "ZipWriter"
+rust_name = "add_directory"
+abi_symbol = "rust_mojo__zip__ZipWriter_add_directory"
+mojo_name = "add_directory"
+kind = "method"
+scalarized_params = [
+  { name = "name", kind = "utf8-string", element = "u_int8", data_param = "name_address", len_param = "name_length" },
+]
+export = "writer.add-directory"
+
+[[mojo.functions]]
+abi_owner = "ZipWriter"
+rust_name = "set_comment"
+abi_symbol = "rust_mojo__zip__ZipWriter_set_comment"
+mojo_name = "set_comment"
+kind = "method"
+scalarized_params = [
+  { name = "comment", kind = "utf8-string", element = "u_int8", data_param = "data_address", len_param = "data_length" },
+]
+export = "writer.set-comment"
+
+[[mojo.functions]]
+abi_owner = "ZipWriter"
+rust_name = "finish"
+abi_symbol = "rust_mojo__zip__ZipWriter_finish"
+mojo_name = "finish"
+kind = "method"
+export = "writer.finish"
+
+[[mojo.functions]]
+abi_owner = "ArchiveResult"
+rust_name = "is_ok"
+abi_symbol = "rust_mojo__zip__ArchiveResult_is_ok"
+mojo_name = "is_ok"
+kind = "method"
+export = "archive-result.is-ok"
+
+[[mojo.functions]]
+abi_owner = "ArchiveResult"
+rust_name = "error_utf8_len"
+abi_symbol = "rust_mojo__zip__ArchiveResult_error_utf8_len"
+kind = "skip"
+reason = "Length companion for ArchiveResult.error."
+
+[[mojo.functions]]
+abi_owner = "ArchiveResult"
+rust_name = "error_utf8_copy"
+abi_symbol = "rust_mojo__zip__ArchiveResult_error_utf8_copy"
+mojo_name = "error"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__ArchiveResult_error_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "archive-result.error"
+
+[[mojo.functions]]
+abi_owner = "ArchiveResult"
+rust_name = "take"
+abi_symbol = "rust_mojo__zip__ArchiveResult_take"
+mojo_name = "take"
+kind = "method"
+optional_none_error = "ArchiveResult has no archive value"
+export = "archive-result.take"
+
+[[mojo.functions]]
+abi_owner = "EntryResult"
+rust_name = "is_ok"
+abi_symbol = "rust_mojo__zip__EntryResult_is_ok"
+mojo_name = "is_ok"
+kind = "method"
+export = "entry-result.is-ok"
+
+[[mojo.functions]]
+abi_owner = "EntryResult"
+rust_name = "error_utf8_len"
+abi_symbol = "rust_mojo__zip__EntryResult_error_utf8_len"
+kind = "skip"
+reason = "Length companion for EntryResult.error."
+
+[[mojo.functions]]
+abi_owner = "EntryResult"
+rust_name = "error_utf8_copy"
+abi_symbol = "rust_mojo__zip__EntryResult_error_utf8_copy"
+mojo_name = "error"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__EntryResult_error_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "entry-result.error"
+
+[[mojo.functions]]
+abi_owner = "EntryResult"
+rust_name = "take"
+abi_symbol = "rust_mojo__zip__EntryResult_take"
+mojo_name = "take"
+kind = "method"
+optional_none_error = "EntryResult has no entry value"
+export = "entry-result.take"
+
+[[mojo.functions]]
+abi_owner = "BytesResult"
+rust_name = "is_ok"
+abi_symbol = "rust_mojo__zip__BytesResult_is_ok"
+mojo_name = "is_ok"
+kind = "method"
+export = "bytes-result.is-ok"
+
+[[mojo.functions]]
+abi_owner = "BytesResult"
+rust_name = "error_utf8_len"
+abi_symbol = "rust_mojo__zip__BytesResult_error_utf8_len"
+kind = "skip"
+reason = "Length companion for BytesResult.error."
+
+[[mojo.functions]]
+abi_owner = "BytesResult"
+rust_name = "error_utf8_copy"
+abi_symbol = "rust_mojo__zip__BytesResult_error_utf8_copy"
+mojo_name = "error"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__BytesResult_error_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "bytes-result.error"
+
+[[mojo.functions]]
+abi_owner = "BytesResult"
+rust_name = "take"
+abi_symbol = "rust_mojo__zip__BytesResult_take"
+mojo_name = "take"
+kind = "method"
+optional_none_error = "BytesResult has no byte value"
+export = "bytes-result.take"
+
+[[mojo.functions]]
+abi_owner = "UnitResult"
+rust_name = "is_ok"
+abi_symbol = "rust_mojo__zip__UnitResult_is_ok"
+mojo_name = "is_ok"
+kind = "method"
+export = "unit-result.is-ok"
+
+[[mojo.functions]]
+abi_owner = "UnitResult"
+rust_name = "error_utf8_len"
+abi_symbol = "rust_mojo__zip__UnitResult_error_utf8_len"
+kind = "skip"
+reason = "Length companion for UnitResult.error."
+
+[[mojo.functions]]
+abi_owner = "UnitResult"
+rust_name = "error_utf8_copy"
+abi_symbol = "rust_mojo__zip__UnitResult_error_utf8_copy"
+mojo_name = "error"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__UnitResult_error_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "unit-result.error"
+
+[[mojo.functions]]
+abi_owner = "CountResult"
+rust_name = "is_ok"
+abi_symbol = "rust_mojo__zip__CountResult_is_ok"
+mojo_name = "is_ok"
+kind = "method"
+export = "count-result.is-ok"
+
+[[mojo.functions]]
+abi_owner = "CountResult"
+rust_name = "value"
+abi_symbol = "rust_mojo__zip__CountResult_value"
+mojo_name = "value"
+kind = "method"
+export = "count-result.value"
+
+[[mojo.functions]]
+abi_owner = "CountResult"
+rust_name = "error_utf8_len"
+abi_symbol = "rust_mojo__zip__CountResult_error_utf8_len"
+kind = "skip"
+reason = "Length companion for CountResult.error."
+
+[[mojo.functions]]
+abi_owner = "CountResult"
+rust_name = "error_utf8_copy"
+abi_symbol = "rust_mojo__zip__CountResult_error_utf8_copy"
+mojo_name = "error"
+kind = "method"
+string_copy = { len_symbol = "rust_mojo__zip__CountResult_error_utf8_len", data_param = "buffer_address", len_param = "buffer_length" }
+export = "count-result.error"

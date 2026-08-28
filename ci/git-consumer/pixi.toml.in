@@ -1,0 +1,42 @@
+[workspace]
+channels = [
+    "https://prefix.dev/conda-forge",
+    "https://conda.modular.com/max",
+    "https://repo.prefix.dev/modular-community",
+]
+platforms = ["@PLATFORM@"]
+preview = ["pixi-build"]
+requires-pixi = ">=0.76"
+
+[package]
+name = "ziprs-ci-consumer"
+version = "0.1.0"
+
+[package.build]
+backend = { name = "pixi-build-mojo", version = "0.*", channels = [
+    "https://prefix.dev/pixi-build-backends",
+    "https://prefix.dev/conda-forge",
+] }
+
+[package.build.config.pkg]
+name = "ziprs_ci_consumer"
+path = "ziprs_ci_consumer"
+
+[package.host-dependencies]
+mojo-compiler = "=1.0.0"
+
+[package.build-dependencies]
+mojo-compiler = "=1.0.0"
+ziprs = { git = "@ZIPRS_GIT@", rev = "@ZIPRS_REV@" }
+
+[package.run-dependencies]
+mojo-compiler = "=1.0.0"
+ziprs = { git = "@ZIPRS_GIT@", rev = "@ZIPRS_REV@" }
+
+[dependencies]
+mojo = "=1.0.0"
+ziprs = { git = "@ZIPRS_GIT@", rev = "@ZIPRS_REV@" }
+"ziprs-ci-consumer" = { path = "." }
+
+[tasks]
+t = "mojo run tests/test_consumer.mojo"

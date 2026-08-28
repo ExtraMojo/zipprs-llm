@@ -1,0 +1,28 @@
+{
+  "bindings": [
+    "zip"
+  ],
+  "generated_files": {
+    "pixi.toml": "5b9eace83a6f46b6e8ff5e4796af7460b7fed667c3c496806a933c0846190814",
+    "recipe.yaml": "b5979948a724e4406f0b84896e27c230fae86176b2efaac64d16103c9be6f8bc"
+  },
+  "generated_modes": {
+    "pixi.toml": 420,
+    "recipe.yaml": 420
+  },
+  "generator": {
+    "name": "rust-mojo-binding-integrator",
+    "sha256": "e9f7048e590922d6615b02022faab329f3bfe44608c0fb22c10ba554f51d1686",
+    "version": "0.1.0"
+  },
+  "package": {
+    "artifact_mode": "publish",
+    "mojo_constraint": "==1.0.0",
+    "name": "ziprs-rust-mojo-bindings",
+    "version": "0.1.0"
+  },
+  "root_manifest": {
+    "publish_owned": true
+  },
+  "schema_version": 1
+}
